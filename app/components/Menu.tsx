@@ -1,10 +1,11 @@
-'use client'
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { roboto } from "../fonts";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { useAuth } from "../features/auth/hooks";
 
 const menuItems = [
   {
@@ -30,6 +31,7 @@ const menuItems = [
 ];
 
 const Menu = () => {
+  const { signOut } = useAuth();
   const pathname = usePathname();
   return (
     <div className={`${roboto} flex flex-col gap-3 p-4 font-semibold`}>
@@ -40,7 +42,10 @@ const Menu = () => {
         <Link
           key={item.label}
           href={item.href}
-          className={clsx("rounded-xl", pathname === item.href ? "bg-gray-100" : "bg-white")}
+          className={clsx(
+            "rounded-xl",
+            pathname === item.href ? "bg-gray-100" : "bg-white"
+          )}
         >
           <div className="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-100 rounded-md">
             <Image src={item.icon} alt="" width={30} height={30} />
@@ -49,12 +54,10 @@ const Menu = () => {
         </Link>
       ))}
       <span className="opacity-50 font-normal">Other</span>
-      <div className="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-100 rounded-md">
-        <Image src="/log-out.svg" alt="" width={30} height={30}></Image>
-        <Link href="/logout">
-          <span className="hidden md:hidden lg:block">LogOut</span>
-        </Link>
-      </div>
+      <button onClick={() => signOut()} className="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-100 rounded-md">
+          <Image src="/log-out.svg" alt="" width={30} height={30}></Image>
+          <span className="hidden md:hidden lg:block">Sign Out</span>
+      </button>
     </div>
   );
 };
