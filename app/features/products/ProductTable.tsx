@@ -32,7 +32,7 @@ const ProductTable: React.FC = () => {
   } = useSelector((state: RootState) => state.products);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, ] = useState(5);
 
   useEffect(() => {
     if (status === "idle") {
