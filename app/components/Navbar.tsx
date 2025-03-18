@@ -11,7 +11,7 @@ const Navbar = () => {
   const avatar = session?.user?.image;
   return (
     <div className="w-full h-[80px] flex justify-end items-center px-4">
-      <div className="pl-7 pr-2 py-2 flex items-center gap-3 bg-gray-100 rounded-3xl">
+      <div className="pl-7 pr-2 py-2 flex items-center gap-3 bg-gray-100 rounded-3xl my-2">
         <div className="flex flex-col items-end">
           <span className="font-semibold text-sm">{name}</span>
           <span className="text-xs opacity-30 font-bold">Admin</span>

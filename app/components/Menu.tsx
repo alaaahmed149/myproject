@@ -14,6 +14,11 @@ const menuItems = [
     href: "/",
   },
   {
+    icon: "/products.svg",
+    label: "Products",
+    href: "/products",
+  },
+  {
     icon: "/wallet-cards.svg",
     label: "Orders",
     href: "/orders",
