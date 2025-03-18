@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "./productsSlice";
 import { RootState, AppDispatch } from "@/app/store/store";
@@ -15,6 +15,13 @@ import {
   TableCell,
   TableHead,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
 import { roboto } from "@/app/fonts";
 const ProductTable: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -23,6 +30,9 @@ const ProductTable: React.FC = () => {
     status,
     error,
   } = useSelector((state: RootState) => state.products);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     if (status === "idle") {
@@ -45,6 +55,12 @@ const ProductTable: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
+  // Controls for the pagination:
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+  // Total number of pages:
+  const totalPages = Math.ceil(products.length / itemsPerPage);
   // Extracting keys:
   const keys =
     products.length > 0
@@ -53,43 +69,71 @@ const ProductTable: React.FC = () => {
         >)
       : [];
   return (
-    <Table className={`${roboto.className}`}>
-      <TableHeader>
-        <TableRow>
-          {keys.map((key) => (
-            <TableHead className="text-md font-bold capitalize" key={key}>
-              {key}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {products.map((product) => (
-          <TableRow key={product.id}>
+    <>
+      <Table className={`${roboto.className}`}>
+        <TableHeader>
+          <TableRow>
             {keys.map((key) => (
-              <TableCell
-                className="max-w-2xl break-words whitespace-normal capitalize"
-                key={key}
-              >
-                {key === "rating" ? null : key === "price" ? (
-                  `\$${product.price}`
-                ) : key === "image" ? (
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    width={30}
-                    height={30}
-                    className="object-cover rounded"
-                  />
-                ) : (
-                  product[key]
-                )}
-              </TableCell>
+              <TableHead className="text-md font-bold capitalize" key={key}>
+                {key}
+              </TableHead>
             ))}
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {currentItems.map((product) => (
+            <TableRow key={product.id}>
+              {keys.map((key) => (
+                <TableCell
+                  className="max-w-2xl break-words whitespace-normal capitalize"
+                  key={key}
+                >
+                  {key === "rating" ? null : key === "price" ? (
+                    `\$${product.price}`
+                  ) : key === "image" ? (
+                    <Image
+                      src={product.image}
+                      alt={product.title}
+                      width={30}
+                      height={30}
+                      className="object-cover rounded"
+                    />
+                  ) : (
+                    product[key]
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {/* Pagination: */}
+      <Pagination className="mt-6">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className="cursor-pointer"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              aria-disabled={currentPage === 1}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              className="cursor-pointer"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              aria-disabled={currentPage === totalPages}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </>
   );
 };
 export default ProductTable;

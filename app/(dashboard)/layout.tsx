@@ -27,7 +27,7 @@ export default function DashboardLayout({
             {/* navBar + mainPart */}
             <div className="w-[80%] xl:w-[80%] lg:w-[82%] md:w-[90%] flex flex-col">
               <Navbar />
-              <main className="main-box-shadow h-screen rounded-2xl mx-2 bg-gray-50 p-5 overflow-scroll">
+              <main className="main-box-shadow h-screen rounded-2xl mx-2 bg-gray-50 p-4">
                 {children}
               </main>
             </div>

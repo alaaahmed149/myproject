@@ -28,7 +28,7 @@ export const authOptions: NextAuthOptions = {
             id: "1",
             name: "User Example",
             role: "Admin",
-            image: "https://www.svgrepo.com/show/17344/avatar.svg",
+            image: "/avatar.svg",
             email: credentials.email,
           };
         }
